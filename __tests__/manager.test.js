@@ -34,10 +34,10 @@ describe('Testing logging function calls', () => {
     expect(JSON.stringify(logVal.payload)).toEqual('{"store":"Test Store","orderId":"Test Order Number","customer":"Test Customer","address":"Test Address"}');
   });
 
-  it('should log the delivered event', () => {
+  it('should log the delivered event', async () => {
 
     const spy = jest.spyOn(console, 'log');
-    logDel(shipment);
+    await logDel(shipment);
     let logVal = (spy.mock.calls[0][0]);
 
     expect(spy).toHaveBeenCalled();
