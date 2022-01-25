@@ -3,14 +3,17 @@
 const eventPool = require('../eventPool');
 
 function driverPickedUp(payload) {
-  console.log(`DRIVER: picked up - ${payload.orderId}`);
-  eventPool.emit('in-transit');
+  setTimeout(() => {
+    console.log(`DRIVER: picked up - ${payload.orderId}`);
+    eventPool.emit('in-transit');
+  }, 2000);
 }
 
-function logDriveDel(payload) {
-  console.log(`DRIVER: delivered - ${payload.orderId}`);
+function driverDelivered(payload) {
+  console.log(`DRIVER: delivered - ${payload.payload.orderId}`);
 }
 
 module.exports = {
   driverPickedUp,
+  driverDelivered,
 };
