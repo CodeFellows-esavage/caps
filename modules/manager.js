@@ -32,12 +32,12 @@ async function logTrans() {
   eventPool.emit('delivered', shipment);
 }
 
-function logDel(payload) {
+async function logDel() {
   shipment.event = 'delivered';
   shipment.time = new Date;
-  setTimeout(() => {
-    console.log(shipment);
-  }, 4000);
+
+  await new Promise(resolve => setTimeout(resolve, 4000));
+  console.log(shipment);
 }
 
 
