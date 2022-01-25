@@ -10,24 +10,39 @@ const shipment = {
 };
 
 describe('Testing logging function calls', () => {
-  xit('should log the pickup event', () => {
+  it('should log the pickup event', () => {
 
+    const spy = jest.spyOn(console, 'log');
     logVendPU(shipment);
-    const spy = jest.spyOn(console, 'log');
+    let logVal = (spy.mock.calls[0][0]);
+
     expect(spy).toHaveBeenCalled();
+    expect(logVal.event).toEqual('pickup');
+    expect(logVal.time).toBeTruthy();
+    expect(JSON.stringify(logVal.payload)).toEqual('{"store":"Test Store","orderId":"Test Order Number","customer":"Test Customer","address":"Test Address"}');
   });
 
-  xit('should log the in-transit event', () => {
+  it('should log the in-transit event', async () => {
 
-    logTrans(shipment);
     const spy = jest.spyOn(console, 'log');
+    await logTrans(shipment);
+    let logVal = (spy.mock.calls[0][0]);
+
     expect(spy).toHaveBeenCalled();
+    expect(logVal.event).toEqual('in-transit');
+    expect(logVal.time).toBeTruthy();
+    expect(JSON.stringify(logVal.payload)).toEqual('{"store":"Test Store","orderId":"Test Order Number","customer":"Test Customer","address":"Test Address"}');
   });
 
-  xit('should log the delivered event', () => {
+  it('should log the delivered event', () => {
 
+    const spy = jest.spyOn(console, 'log');
     logDel(shipment);
-    const spy = jest.spyOn(console, 'log');
+    let logVal = (spy.mock.calls[0][0]);
+
     expect(spy).toHaveBeenCalled();
+    expect(logVal.event).toEqual('delivered');
+    expect(logVal.time).toBeTruthy();
+    expect(JSON.stringify(logVal.payload)).toEqual('{"store":"Test Store","orderId":"Test Order Number","customer":"Test Customer","address":"Test Address"}');
   });
 });

@@ -20,19 +20,16 @@ function logVendPU(payload) {
   console.log(shipment);
 }
 
-function logTrans() {
+async function logTrans() {
   //payload doesn't transfer...
   shipment.event = 'in-transit';
   shipment.time = new Date;
 
-  setTimeout(() => {
-    console.log(shipment);
-  }, 2000);
+  await new Promise(resolve => setTimeout(resolve, 2000));
+  console.log(shipment);
 
-
-  setTimeout(() => {
-    eventPool.emit('delivered', shipment);
-  }, 4000);
+  await new Promise(resolve => setTimeout(resolve, 2000));
+  eventPool.emit('delivered', shipment);
 }
 
 function logDel(payload) {

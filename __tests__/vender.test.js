@@ -1,26 +1,36 @@
 'use strict';
 
 const { vendorGenPickUp, vendorRecieved } = require('../modules/vendor');
+const eventPool = require('../eventPool');
 
-const shipment = {
-  store: 'Test Store',
-  orderId: 'Test Order Number',
-  customer: 'Test Customer',
-  address: 'Test Address',
+const eventShipment = {
+  event: 'delivered',
+  time: 'sometime',
+  payload: {
+    store: 'Test Store',
+    orderId: 'Test Order Number',
+    customer: 'Test Customer',
+    address: 'Test Address',
+  },
 };
 
 describe('Testing vendor function calls', () => {
-  xit('should generate a pickup event', () => {
+  it('should generate a pickup event', () => {
 
+    const spy = jest.spyOn(eventPool, 'emit');
     vendorGenPickUp();
-    const spy = jest.spyOn(console, 'log');
+    let response = spy.mock.calls;
     expect(spy).toHaveBeenCalled();
+    expect(response[0][0]).toEqual('pickup');
+    expect(response[0][1]).toBeTruthy();
   });
 
-  xit('should log the vendor recieved event', () => {
+  it('should log the vendor recieved event', async () => {
 
-    vendorRecieved(shipment);
     const spy = jest.spyOn(console, 'log');
+    await vendorRecieved(eventShipment);
+
     expect(spy).toHaveBeenCalled();
+    expect(spy).toHaveBeenCalledWith('VENDOR: Thanks for delivering - Test Order Number');
   });
 });
