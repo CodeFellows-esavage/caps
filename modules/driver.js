@@ -2,11 +2,14 @@
 
 const eventPool = require('../eventPool');
 
-function driverPickedUp(payload) {
-  setTimeout(() => {
-    console.log(`DRIVER: picked up - ${payload.orderId}`);
-    eventPool.emit('in-transit');
-  }, 2000);
+async function driverPickedUp(payload) {
+  await new Promise(resolve => setTimeout(resolve, 2000));
+  console.log(`DRIVER: picked up - ${payload.orderId}`);
+  eventPool.emit('in-transit');
+  // setTimeout(() => {
+  //   console.log(`DRIVER: picked up - ${payload.orderId}`);
+  //   eventPool.emit('in-transit');
+  // }, 2000);
 }
 
 function driverDelivered(payload) {

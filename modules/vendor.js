@@ -25,10 +25,10 @@ function vendorGenPickUp() {
   eventPool.emit('pickup', shipment);
 }
 
-function vendorRecieved(payload) {
-  setTimeout(() => {
-    console.log(`VENDOR: Thanks for delivering - ${payload.payload.orderId}`);
-  }, 2000);
+async function vendorRecieved(payload) {
+
+  await new Promise(resolve => setTimeout(resolve, 2000));
+  console.log(`VENDOR: Thanks for delivering - ${payload.payload.orderId}`);
 }
 
 module.exports = {

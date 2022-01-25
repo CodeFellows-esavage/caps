@@ -9,18 +9,39 @@ const shipment = {
   address: 'Test Address',
 };
 
-describe('Testing driver function calls', () => {
-  xit('should log the pickup event', () => {
+const eventShipment = {
+  event: 'delivered',
+  time: 'sometime',
+  payload: {
+    store: 'Test Store',
+    orderId: 'Test Order Number',
+    customer: 'Test Customer',
+    address: 'Test Address',
+  },
+};
 
-    driverPickedUp(shipment);
+describe('Testing driver function calls', () => {
+  it('should log the pickup event', async () => {
+
     const spy = jest.spyOn(console, 'log');
+    await driverPickedUp(shipment);
+
     expect(spy).toHaveBeenCalled();
+    expect(spy).toHaveBeenCalledWith('DRIVER: picked up - Test Order Number');
+    // expect(logVal).toEqual('DRIVER: picked up - Test Order Number');
   });
 
-  xit('should log the driver delivered event', () => {
+  it('should log the driver delivered event', () => {
 
-    driverDelivered(shipment);
     const spy = jest.spyOn(console, 'log');
+    driverDelivered(eventShipment);
+
     expect(spy).toHaveBeenCalled();
+    expect(spy).toHaveBeenCalledWith('DRIVER: delivered - Test Order Number');
   });
 });
+
+// logVendPU(shipment);
+
+// expect(spy).toHaveBeenCalled();
+// expect(logVal.event).toEqual('pickup');

@@ -47,6 +47,8 @@ Verifies the following:
 - jest docs
 - supertest docs
 - http cats
+- stack overflow, for Promise timeout used to make timeout async
 - Code Fellows
   - Kellen Linse
   - Daniel Jackson
+  - 
