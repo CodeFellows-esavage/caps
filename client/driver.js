@@ -1,0 +1,16 @@
+'use strict';
+
+const socketClient = require('socket.io-client');
+const caps = socketClient.connect('http://localhost:3000/caps');
+
+caps.on('pickup', async (payload) => {
+  console.log(`DRIVER: picked up ORDER: ${payload.payload.orderId}`);
+
+  await new Promise(resolve => setTimeout(resolve, 1500));
+  caps.emit('in-transit', payload);
+
+  // driverDelivered(payload);
+  await new Promise(resolve => setTimeout(resolve, 1500));
+  console.log(`DRIVER: delivered ORDER: ${payload.payload.orderId}`);
+  caps.emit('delivered', payload);
+});

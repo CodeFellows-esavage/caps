@@ -18,6 +18,8 @@
   },
   "homepage": "https://github.com/eriksavage/caps#readme",
   "dependencies": {
-    "jest": "^27.4.7"
+    "jest": "^27.4.7",
+    "socket.io": "^4.4.1",
+    "socket.io-client": "^4.4.1"
   }
 }
