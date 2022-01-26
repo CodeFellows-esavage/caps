@@ -5,7 +5,8 @@ A real-time service that allows for vendors, such as flower shops or restaurants
 
 Deployment URL: NOT CURRENTLY DEPLOYED
 
-![Data Flow](/UML.png)
+![Data Flow](./assets/phase1UML.png)
+![Data Flow](./assets/phase2UML.png)
 
 ## Installation
 - to install run `git@github.com:eriksavage/caps.git`
@@ -38,9 +39,7 @@ Event types: pickup, in-transit, delivered
 
 ## Testing
 Verifies the following:
-- manager module function calls
-- vendor module function calls
-- driver module function calls
+- no testing at the moment
 
 ## Resources
 - sequelize docs
