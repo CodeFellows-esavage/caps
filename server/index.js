@@ -8,20 +8,20 @@ const server = socketio(PORT);
 const caps = server.of('/caps');
 
 const queue = {
-  logs: {},
+  deliveries: {},
   shipments: {},
-  addLog: function (log) {
+  addDelivery: function (payload) {
     //function to add a log
     let id = uuid();
-    this.logs[id] = log;
+    this.deliveries[id] = payload;
     return {
       id,
-      payload: log,
+      payload: payload,
     };
   },
-  removeLog: function (id) {
+  removeDelivery: function (id) {
     //function to remove a log
-    delete queue.logs[id];
+    delete queue.deliveries[id];
   },
   addShipment: function (shipment) {
     //function to add a shipment to the shipmnents log
@@ -52,21 +52,44 @@ caps.on('connection', (socket) => {
   socket.on('pickup', (payload) => {
     socket.join(payload.store);
     let shipment = new EVENT('pickup', new Date, payload);
-    console.log(shipment);
+    // console.log(shipment);
+    shipment = queue.addShipment(shipment);
+    console.log(queue.shipments);
     caps.emit('pickup', shipment);
   });
 
   socket.on('in-transit', async (payload) => {
-    payload.event = 'in-transit';
-    payload.time = new Date;
+    payload.payload.event = 'in-transit';
+    payload.payload.time = new Date;
     console.log(payload);
-    caps.to(payload.payload.store).emit('in-transit', payload);
+    caps.to(payload.payload.payload.store).emit('in-transit', payload);
   });
 
   socket.on('delivered', (payload) => {
-    payload.event = 'delivered';
-    payload.time = new Date;
+    payload.payload.event = 'delivered';
+    payload.payload.time = new Date;
     console.log(payload);
-    caps.to(payload.payload.store).emit('delivered', payload);
+    queue.addDelivery(payload);
+    // console.log(queue.logs);
+    caps.to(payload.payload.payload.store).emit('delivered', payload);
+    queue.removeShipment(payload.id);
+  });
+
+  socket.on('recieved', (delivery) => {
+    //payload should include the client id, event name, and message id
+    queue.removeDelivery(delivery.id);
+  });
+
+  socket.on('getAll', (payload) => {
+    //payload should include the client id and event name.
+    if (payload.clientId === 'driver') {
+      Object.keys(queue.shipments).forEach(id => {
+        socket.emit('pickup', { id, payload: queue.shipments[id] });
+      });
+    } else if (payload.clientId === 'vendor') {
+      Object.keys(queue.deliveries).forEach(id => {
+        socket.emit('delivered', { id, payload: queue.deliveries[id] });
+      });
+    }
   });
 });
