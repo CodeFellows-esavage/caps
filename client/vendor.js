@@ -23,11 +23,18 @@ const shipment = {
 };
 
 caps.on('connect', () => {
+  console.log(caps.id);
+  const request = {
+    clientId: 'vendor',
+    event: 'delivered',
+  };
+  caps.emit('getAll', request);
   caps.emit('pickup', shipment);
 });
 
 caps.on('delivered', (payload) => {
-  console.log(`VENDOR: Thank you for delivering ORDER: ${payload.payload.orderId}`);
+  console.log(`VENDOR: Thank you for delivering ORDER: ${payload.payload.payload.orderId}`);
+  caps.emit('recieved', payload);
 });
 
 
