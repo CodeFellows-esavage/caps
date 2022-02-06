@@ -7,36 +7,37 @@ const PORT = process.env.PORT || 3000;
 const server = socketio(PORT);
 const caps = server.of('/caps');
 
-const queue = {
-  deliveries: {},
-  shipments: {},
-  addDelivery: function (payload) {
-    //function to add a log
+class Queue {
+  constructor() {
+    this.deliveries = {};
+    this.shipments = {};
+  }
+  addDelivery(payload) {
+
     let id = uuid();
     this.deliveries[id] = payload;
     return {
       id,
       payload: payload,
     };
-  },
-  removeDelivery: function (id) {
-    //function to remove a log
-    delete queue.deliveries[id];
-  },
-  addShipment: function (shipment) {
-    //function to add a shipment to the shipmnents log
+  }
+  removeDelivery(id) {
+    delete this.deliveries[id];
+  }
+  addShipment(shipment) {
     let id = uuid();
     this.shipments[id] = shipment;
     return {
       id,
       payload: shipment,
     };
-  },
-  removeShipment: function (id) {
-    //function to remove a shipment
-    delete queue.shipments[id];
-  },
-};
+  }
+  removeShipment(id) {
+    delete this.shipments[id];
+  }
+}
+
+const queue = new Queue;
 
 class EVENT {
   constructor(event, time, payload) {
@@ -88,8 +89,13 @@ caps.on('connection', (socket) => {
       });
     } else if (payload.clientId === 'vendor') {
       Object.keys(queue.deliveries).forEach(id => {
-        socket.emit('delivered', { id, payload: queue.deliveries[id] });
+        socket.emit('delivered', queue.deliveries[id]);
       });
     }
   });
 });
+
+module.exports = {
+  Queue,
+  server,
+};
