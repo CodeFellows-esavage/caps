@@ -3,11 +3,6 @@
 const socketClient = require('socket.io-client');
 const caps = socketClient.connect('http://localhost:3000/caps');
 
-// caps.on('connect', (socket) => {
-//   socket.emit('getAll');
-// });
-
-// caps.on('getAll')
 caps.on('connect', () => {
   console.log(caps.id);
   const request = {
